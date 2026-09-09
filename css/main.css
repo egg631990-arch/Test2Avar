@@ -49,7 +49,7 @@ a {
 }
 
 #We:hover #logo {
-  transform: scale(1.5);  /* увеличиваем картинку на 20% */
+  transform: scale(1.2);  /* увеличиваем картинку на 20% */
   transition: transform 0.2s ease; /* плавно */
 }
 
