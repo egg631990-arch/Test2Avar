@@ -1,18 +1,30 @@
 <!DOCTYPE html>
-
 <html>
 <head>
   <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pay</title>
   <link rel="stylesheet" href="css/main-pay.css">
 </head>
 <body>
   
+  <!-- Блок с аватаркой (оставляем как есть) -->
   <div id="avatar-container">
-    <img id="avatar-img" src="" alt="Аватар" style="width:50px; height:50px; border-radius:50%;">
+    <img id="avatar-img" src="" alt="Аватар">
   </div>
-  
-  
+
+  <!-- Блок оплаты -->
+  <div id="pay-container">
+    <h2>Оплата звёздами</h2>
+    <div class="input-group">
+      <label for="stars-input">Количество звёзд</label>
+      <input type="number" id="stars-input" placeholder="Введите сумму" min="1" value="10">
+    </div>
+    <button id="pay-button">Оплатить</button>
+    <div id="result-message"></div>
+  </div>
+
+  <!-- Подключаем SDK и наш скрипт -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script src="js/index-pay.js"></script>
 </body>
