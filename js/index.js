@@ -24,3 +24,15 @@ document.addEventListener('DOMContentLoaded', function() {
     console.warn('Telegram WebApp SDK не загружен');
   }
 });
+document.addEventListener('DOMContentLoaded', function() {
+  const link = document.getElementById('We');
+  if (link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const href = this.getAttribute('href');
+      setTimeout(() => {
+        window.location.href = href;
+      }, 200); // 2 секунды
+    });
+  }
+});
