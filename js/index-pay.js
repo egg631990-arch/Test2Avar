@@ -26,72 +26,88 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-  // Проверяем, что WebApp доступен
   if (typeof Telegram === 'undefined' || !Telegram.WebApp) {
     console.warn('Telegram WebApp не загружен');
     return;
   }
 
-  // Получаем элементы
   const payButton = document.getElementById('pay-button');
   const starsInput = document.getElementById('stars-input');
   const resultDiv = document.getElementById('result-message');
+  const balanceSpan = document.getElementById('balance-value');
 
-  // Получаем данные пользователя (для красоты)
+  // Получаем данные пользователя
   const user = Telegram.WebApp.initDataUnsafe?.user;
+  const userId = user?.id;
+
+  // Загружаем баланс из localStorage (в реальном проекте — с сервера)
+  let currentBalance = parseInt(localStorage.getItem('userBalance') || '0');
+  balanceSpan.textContent = currentBalance;
+
+  // Аватарка
   if (user && user.photo_url) {
-    const avatarImg = document.getElementById('avatar-img');
-    avatarImg.src = user.photo_url;
+    document.getElementById('avatar-img').src = user.photo_url;
   }
 
-  // Обработчик клика по кнопке
-  payButton.addEventListener('click', function() {
-    const amount = parseInt(starsInput.value, 10);
-
-    // Проверяем корректность суммы
-    if (isNaN(amount) || amount < 1) {
-      Telegram.WebApp.showAlert('Пожалуйста, введите корректное количество звёзд (минимум 1).');
+  payButton.addEventListener('click', async function() {
+    const starsAmount = parseInt(starsInput.value, 10);
+    
+    if (isNaN(starsAmount) || starsAmount < 1) {
+      Telegram.WebApp.showAlert('Введите корректное количество звёзд (минимум 1).');
       return;
     }
 
-    // Блокируем кнопку на время обработки
-    payButton.disabled = true;
-    resultDiv.textContent = '⏳ Обработка...';
+    if (!userId) {
+      Telegram.WebApp.showAlert('Ошибка: пользователь не авторизован.');
+      return;
+    }
 
-    // Симулируем запрос к серверу (в реальном проекте здесь будет создание инвойса)
-    setTimeout(() => {
-      // Вариант 1: показать подтверждение через встроенное окно
-      Telegram.WebApp.showPopup({
-        title: 'Подтверждение оплаты',
-        message: `Вы собираетесь оплатить ${amount} звёзд. Продолжить?`,
-        buttons: [
-          { id: 'yes', type: 'default', text: 'Оплатить' },
-          { id: 'cancel', type: 'destructive', text: 'Отмена' }
-        ]
-      }, function(buttonId) {
-        if (buttonId === 'yes') {
-          // Здесь в реальном проекте нужно вызвать Telegram.WebApp.openInvoice(slug)
-          // и обработать результат.
-          // Для демонстрации просто покажем успешный попап.
-          Telegram.WebApp.showAlert(`✅ Оплата ${amount} звёзд успешно выполнена!`);
-          resultDiv.textContent = `✅ Оплачено ${amount} звёзд`;
-          // Можно отправить событие на сервер через sendData
-          // Telegram.WebApp.sendData(JSON.stringify({ action: 'pay', stars: amount }));
-        } else {
+    payButton.disabled = true;
+    resultDiv.textContent = '⏳ Создание счёта...';
+
+    try {
+      // 1. Запрашиваем ссылку на инвойс у сервера
+      const response = await fetch('https://ваш-сервер.com/create-invoice', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id: userId,
+          stars_amount: starsAmount
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (!data.invoiceLink) {
+        throw new Error('Не удалось создать счёт');
+      }
+
+      resultDiv.textContent = '⏳ Ожидание оплаты...';
+
+      // 2. Открываем инвойс в Telegram
+      Telegram.WebApp.openInvoice(data.invoiceLink, function(status) {
+        if (status === 'paid') {
+          // Платёж успешен — обновляем баланс
+          currentBalance += starsAmount;
+          localStorage.setItem('userBalance', String(currentBalance));
+          balanceSpan.textContent = currentBalance;
+          resultDiv.textContent = `✅ Баланс пополнен на ${starsAmount} ⭐`;
+        } else if (status === 'failed') {
+          resultDiv.textContent = '❌ Ошибка при оплате';
+        } else if (status === 'cancelled') {
           resultDiv.textContent = '❌ Оплата отменена';
+        } else {
+          resultDiv.textContent = '❌ Неизвестный статус';
         }
         payButton.disabled = false;
       });
-    }, 500); // имитация задержки
 
-    // Альтернативно, если хочешь просто показать alert:
-    /*
-    Telegram.WebApp.showAlert(`Оплата ${amount} звёзд завершена!`);
-    resultDiv.textContent = `✅ Оплачено ${amount} звёзд`;
-    payButton.disabled = false;
-    */
+    } catch (error) {
+      Telegram.WebApp.showAlert('Ошибка: ' + error.message);
+      resultDiv.textContent = '❌ Ошибка при создании счёта';
+      payButton.disabled = false;
+    }
   });
 
-  // Сообщаем Telegram, что приложение готово
   Telegram.WebApp.ready();
 });
