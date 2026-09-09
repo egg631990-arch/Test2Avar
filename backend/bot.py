@@ -59,7 +59,7 @@ async def webhook(request: Request):
 
 @app.on_event("startup")
 async def on_startup():
-    webhook_url = os.getenv("WEBHOOK_URL", "https://ваш-сервис.onrender.com/webhook")
+    webhook_url = "https://telegcas.onrender.com/webhook"
     await bot.set_webhook(url=webhook_url, drop_pending_updates=True)
     logging.info(f"Webhook set to {webhook_url}")
 
