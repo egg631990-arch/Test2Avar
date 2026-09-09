@@ -30,3 +30,26 @@ body {
   border-radius:50%;
 }
 
+.NoDecorHref {
+  text-decoration-line: none;
+}
+
+a, a:link, a:visited, a:hover, a:active {
+  text-decoration: none;     
+  color: inherit;              
+  outline: none; 
+}
+
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+#We {
+  display: inline-block;  /* чтобы ссылка обтекала картинку */
+}
+
+#We:hover #logo {
+  transform: scale(1.5);  /* увеличиваем картинку на 20% */
+  transition: transform 0.2s ease; /* плавно */
+}
+
