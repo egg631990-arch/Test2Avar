@@ -53,3 +53,37 @@ a {
   transition: transform 0.2s ease; /* плавно */
 }
 
+#GlassB {
+  width: 40px;
+  height: 2px;
+  z-index: 1000;
+  position: fixed;
+  top: 23px;
+  left: 280px;
+} 
+
+#GlassB {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.15);        /* прозрачный белый */
+  backdrop-filter: blur(12px);                  /* размытие фона */
+  -webkit-backdrop-filter: blur(12px);          /* для Safari */
+  border: 1px solid rgba(255, 255, 255, 0.25); /* тонкая светлая рамка */
+  border-radius: 50px;                           /* круглая форма */
+  padding: 10px;                                /* отступ, чтобы стекло было видно за картинкой */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);   /* тень */
+  transition: all 0.3s ease;
+}
+
+/* Чтобы картинка не выходила за пределы стекла */
+#GlassB img {
+  display: block;
+  border-radius: 50%;
+}
+
+/* Эффект при наведении – усиливаем стекло */
+#We:hover {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(16px);
+  transform: scale(1.05);
+}
+
