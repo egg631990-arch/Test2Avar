@@ -10,6 +10,12 @@
   font-style: normal;
 }
 
+#AutoP {
+  color: #3E3E3E;
+  position: relative;
+  top: 35px;
+}
+
 /* Экран загрузки – на весь экран, поверх всего */
 #Loading {
   position: fixed;
@@ -26,9 +32,28 @@
   transition: opacity 0.5s ease;
 }
 
+#Byg {
+  position: relative;
+  flex-wrap: nowrap;
+  top: -400px;
+  font-size: 12px;
+}
+
+#loading-video {
+  position: relative; 
+  top: 430px;
+}
+
 .Text {
+  position: relative;
+  top: 30px;
   font-family: "Tit";
   color: #fff
+}
+
+#logo-loading {
+  position: relative;
+  top: -250px;
 }
 
 /* Контент внутри загрузки (текст + спиннер) */
