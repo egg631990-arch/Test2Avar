@@ -54,12 +54,12 @@ a {
 }
 
 #GlassB {
-  width: 40px;
-  height: 2px;
+  width: 60px;
+  height: 7px;
   z-index: 1000;
   position: fixed;
   top: 30px;
-  left: 280px;
+  left: 260px;
 } 
 
 #GlassB {
@@ -87,3 +87,43 @@ a {
   transform: scale(1.05);
 }
 
+.Corusel {
+  white-space: nowrap;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 10px;
+  padding: 10px;
+  position: relative;
+  top: -100px;
+}
+
+.Corusel {
+  white-space: nowrap;          /* для inline-блоков, но лучше заменить на flex */
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 10px;
+  padding: 10px;
+  scroll-snap-type: x mandatory; /* привязка к картинкам */
+  -webkit-overflow-scrolling: touch;
+  display: flex;                /* вместо white-space: nowrap (так надёжнее) */
+  /* если оставляете white-space, то элементы должны быть inline-block, но с flex проще */
+}
+
+/* Если используете flex — уберите white-space: nowrap, он не нужен */
+.Corusel {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 10px;
+  padding: 10px;
+  scroll-snap-type: x mandatory;
+}
+
+/* Каждая картинка — 100% ширины родителя (минус отступы) */
+.Corusel img {
+  flex: 0 0 calc(100% - 20px);  /* 20px = padding слева+справа (10+10) */
+  scroll-snap-align: start;
+  height: auto;
+  max-width: 100%;
+  object-fit: cover;           /* по желанию */
+}
