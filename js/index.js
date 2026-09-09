@@ -94,3 +94,15 @@ corusel.addEventListener('mouseleave', () => {
 window.addEventListener('resize', () => {
   // ничего не делаем, т.к. ширина пересчитается при следующем вызове goToSlide
 });
+// Ждём загрузки страницы, затем через 2 секунды прячем экран загрузки
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    const loading = document.getElementById('Loading');
+    loading.style.opacity = '0';            // плавное исчезновение
+    setTimeout(function() {
+      loading.style.display = 'none';       // убираем из потока
+      document.body.style.overflow = '';    // возвращаем прокрутку
+      document.getElementById('main-content').style.display = 'block'; // показываем контент
+    }, 500); // время совпадает с transition (0.5s)
+  }, 3000); // имитация загрузки – 2 секунды
+});
