@@ -32,7 +32,19 @@ document.addEventListener('DOMContentLoaded', function() {
       const href = this.getAttribute('href');
       setTimeout(() => {
         window.location.href = href;
-      }, 200); // 2 секунды
+      }, 300); // 2 секунды
+    });
+  }
+});
+document.addEventListener('DOMContentLoaded', function() {
+  const link = document.getElementById('We');
+  if (link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const href = this.getAttribute('href');
+      setTimeout(() => {
+        window.location.href = href;
+      }, 300);
     });
   }
 });
