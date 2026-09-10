@@ -14,14 +14,13 @@
       <p class="Text">loading...</p>
       <p id="AutoP">Copyright © 2026</p>
       <div id="Byg" style="color: #fff; white-space: nowrap;">
-  The <span style="color: #FFF112;">Virtual</span> Future of NFT <span style="color: #FFF112;">Games</span>
-</div>
+        The <span style="color: #FFF112;">Virtual</span> Future of NFT <span style="color: #FFF112;">Games</span>
+      </div>
   </div>
   
   <div id="hr"></div>
   <a href="Pay.html"><div id="Pay">+</div></a>
   
-  <!-- Контейнер для аватарки -->
   <div id="avatar-container">
     <img id="avatar-img" src="" alt="Аватар" style="width:50px; height:50px; border-radius:50%;">
   </div>
@@ -36,12 +35,44 @@
   </div>
   
   <div id="balance-display">
-  <span id="balance-value">0</span>
-</div>
+    <span id="balance-value">0</span>
+  </div>
   
   <!-- Подключаем Telegram WebApp SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script src="js/index.js"></script>
   <script src="js/Pay.js"></script>
+
+  <!-- 🔥 Чтение баланса из CloudStorage -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof Telegram === 'undefined' || !Telegram.WebApp) {
+        console.warn('Telegram WebApp не загружен');
+        return;
+      }
+
+      Telegram.WebApp.ready();
+
+      const balanceSpan = document.getElementById('balance-value');
+
+      function updateBalance() {
+        Telegram.WebApp.CloudStorage.getItem('userBalance', (err, value) => {
+          if (err) {
+            console.error('Ошибка чтения баланса:', err);
+            return;
+          }
+          const balance = parseInt(value || '0', 10);
+          if (balanceSpan) balanceSpan.textContent = balance;
+        });
+      }
+
+      updateBalance();
+
+      // Обновляем баланс при возврате на страницу (например, после оплаты)
+      document.addEventListener('visibilitychange', function() {
+        if (!document.hidden) updateBalance();
+      });
+    });
+  </script>
 </body>
 </html>
