@@ -20,10 +20,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
   payButton.addEventListener('click', async function() {
     const starsAmount = parseInt(starsInput.value, 10);
-    if (isNaN(starsAmount) || starsAmount < 1) {
-      Telegram.WebApp.showAlert('Введите корректное количество звёзд (минимум 1).');
-      return;
-    }
+    if (isNaN(starsAmount) || starsAmount < 10) {
+  Telegram.WebApp.showAlert('Минимальная сумма пополнения — 10 звёзд.');
+  return;
+}
     if (!userId) {
       Telegram.WebApp.showAlert('Ошибка: пользователь не авторизован.');
       return;
