@@ -20,10 +20,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
   payButton.addEventListener('click', async function() {
     const starsAmount = parseInt(starsInput.value, 10);
+
+    // ✅ Проверка минимальной суммы
     if (isNaN(starsAmount) || starsAmount < 10) {
-  Telegram.WebApp.showAlert('Минимальная сумма пополнения — 10 звёзд.');
-  return;
-}
+      Telegram.WebApp.showAlert('Минимальная сумма пополнения — 10 звёзд.');
+      return;
+    }
+
     if (!userId) {
       Telegram.WebApp.showAlert('Ошибка: пользователь не авторизован.');
       return;
@@ -42,22 +45,41 @@ document.addEventListener('DOMContentLoaded', function() {
       if (!data.invoiceLink) throw new Error('Не удалось создать счёт');
 
       resultDiv.textContent = '⏳ Ожидание оплаты...';
+
       Telegram.WebApp.openInvoice(data.invoiceLink, function(status) {
         if (status === 'paid') {
-          // 🔥 Обновляем баланс в localStorage — его прочитает index.html
-          let currentBalance = parseInt(localStorage.getItem('userBalance') || '0');
-          currentBalance += starsAmount;
-          localStorage.setItem('userBalance', String(currentBalance));
-          resultDiv.textContent = `✅ Баланс пополнен на ${starsAmount} ⭐`;
+          // ✅ Читаем текущий баланс из CloudStorage и обновляем
+          Telegram.WebApp.CloudStorage.getItem('userBalance', (err, value) => {
+            if (err) {
+              console.error('Ошибка чтения баланса:', err);
+              // Если ошибка — начинаем с 0
+              value = '0';
+            }
+            let currentBalance = parseInt(value || '0', 10);
+            currentBalance += starsAmount;
+
+            // Сохраняем новый баланс
+            Telegram.WebApp.CloudStorage.setItem('userBalance', String(currentBalance), (err) => {
+              if (err) {
+                console.error('Ошибка сохранения баланса:', err);
+                resultDiv.textContent = '⚠️ Оплата прошла, но баланс не сохранился';
+                return;
+              }
+              resultDiv.textContent = `✅ Баланс пополнен на ${starsAmount} ⭐`;
+              // Опционально: закрыть Mini App, чтобы вернуться на index.html
+              // Telegram.WebApp.close();
+            });
+          });
         } else if (status === 'failed') {
           resultDiv.textContent = '❌ Ошибка при оплате';
         } else if (status === 'cancelled') {
           resultDiv.textContent = '❌ Оплата отменена';
         } else {
-          resultDiv.textContent = '❌ Неизвестный статус';
+          resultDiv.textContent = '❌ Неизвестный статус: ' + status;
         }
         payButton.disabled = false;
       });
+
     } catch (error) {
       Telegram.WebApp.showAlert('Ошибка: ' + error.message);
       resultDiv.textContent = '❌ Ошибка при создании счёта';
