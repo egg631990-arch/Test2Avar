@@ -3,6 +3,21 @@
   padding: 0;
 }
 
+body {
+  overflow-x: hidden;
+}
+
+#balance-value {
+  font-family: "Tit";
+  z-index: 2000;
+  color: #fff;
+  position: relative;
+  top: -394px;
+  left: 298px;
+}
+
+
+
 @font-face {
   font-family: Tit;
   src: url("../fonts/ofont.ru_Hirro Sans.ttf") format("TrueType");
@@ -70,7 +85,6 @@ body {
 
 body {
   background: #161616;
-  height: 1000px;
 }
 
 #logo {
@@ -155,7 +169,7 @@ a {
   white-space: nowrap;
   overflow-x: auto;
   scroll-behavior: smooth;
-  gap: 10px;
+  gap: 15px;
   padding: 10px;
   position: relative;
   top: -70px;
@@ -165,7 +179,7 @@ a {
   white-space: nowrap;          /* для inline-блоков, но лучше заменить на flex */
   overflow-x: auto;
   scroll-behavior: smooth;
-  gap: 10px;
+  gap: 15px;
   padding: 10px;
   scroll-snap-type: x mandatory; /* привязка к картинкам */
   -webkit-overflow-scrolling: touch;
@@ -178,7 +192,7 @@ a {
   display: flex;
   overflow-x: auto;
   scroll-behavior: smooth;
-  gap: 10px;
+  gap: 15px;
   padding: 10px;
   scroll-snap-type: x mandatory;
 }
@@ -215,4 +229,3 @@ a {
   border-radius: 100px;
   line-height: 25px;
 }
-
