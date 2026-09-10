@@ -106,3 +106,4 @@ window.addEventListener('load', function() {
     }, 500); // время совпадает с transition (0.5s)
   }, 3000); // имитация загрузки – 2 секунды
 });
+

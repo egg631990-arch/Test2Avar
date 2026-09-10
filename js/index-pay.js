@@ -4,25 +4,18 @@ document.addEventListener('DOMContentLoaded', function() {
     return;
   }
 
-  const SERVER_URL = 'https://telegcas.onrender.com'; // ← твой сервер
+  const SERVER_URL = 'https://telegcas.onrender.com';
 
   const payButton = document.getElementById('pay-button');
   const starsInput = document.getElementById('stars-input');
   const resultDiv = document.getElementById('result-message');
-  const balanceSpan = document.getElementById('balance-value');
 
   const user = Telegram.WebApp.initDataUnsafe?.user;
   const userId = user?.id;
 
-  let currentBalance = parseInt(localStorage.getItem('userBalance') || '0');
-  balanceSpan.textContent = currentBalance;
-
-  // Аватарка
   const avatarImg = document.getElementById('avatar-img');
-  if (user && user.photo_url) {
+  if (user && user.photo_url && avatarImg) {
     avatarImg.src = user.photo_url;
-  } else if (user) {
-    avatarImg.src = 'https://via.placeholder.com/100/cccccc/666666?text=' + (user.first_name ? user.first_name[0] : '?');
   }
 
   payButton.addEventListener('click', async function() {
@@ -51,9 +44,10 @@ document.addEventListener('DOMContentLoaded', function() {
       resultDiv.textContent = '⏳ Ожидание оплаты...';
       Telegram.WebApp.openInvoice(data.invoiceLink, function(status) {
         if (status === 'paid') {
+          // 🔥 Обновляем баланс в localStorage — его прочитает index.html
+          let currentBalance = parseInt(localStorage.getItem('userBalance') || '0');
           currentBalance += starsAmount;
           localStorage.setItem('userBalance', String(currentBalance));
-          balanceSpan.textContent = currentBalance;
           resultDiv.textContent = `✅ Баланс пополнен на ${starsAmount} ⭐`;
         } else if (status === 'failed') {
           resultDiv.textContent = '❌ Ошибка при оплате';
