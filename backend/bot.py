@@ -51,8 +51,6 @@ async def create_invoice(request: Request):
 @router.pre_checkout_query()
 async def pre_checkout_query(pre_checkout_q: PreCheckoutQuery):
     await bot.answer_pre_checkout_query(pre_checkout_q.id, ok=True)
-if not user_id or not stars_amount or stars_amount < 10:
-    return {"error": "Minimum amount is 10 stars"}
 
 # Обработка вебхука (сюда Telegram присылает статус оплаты)
 @app.post("/webhook")
