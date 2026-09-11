@@ -4,8 +4,9 @@
 }
 
 body {
-  background: #161616;
   overflow-x: hidden;
+  overflow: hidden;
+  background: #161616;
 }
 
 @font-face {
@@ -15,7 +16,19 @@ body {
   font-style: normal;
 }
 
-/* ============ ЭКРАН ЗАГРУЗКИ ============ */
+a, a:link, a:visited, a:hover, a:active {
+  text-decoration: none;
+  color: inherit;
+  outline: none;
+}
+
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ==============================
+   ЭКРАН ЗАГРУЗКИ
+   ============================== */
 #Loading {
   position: fixed;
   top: 0;
@@ -61,15 +74,24 @@ body {
   font-size: 12px;
 }
 
-/* ============ ШАПКА / ВЕРХ ============ */
-#logo {
-  position: relative;
-  top: -75px;
-  left: 0px;
+.loader-content {
+  text-align: center;
+  color: white;
+  font-family: Arial, sans-serif;
 }
 
+/* ==============================
+   ЛОГОТИП / АВАТАР
+   ============================== */
 #We {
   display: inline-block;
+}
+
+#logo {
+  position: relative;
+  top: -55px;
+  left: 0px;
+  z-index: 5000;
 }
 
 #We:hover #logo {
@@ -77,56 +99,33 @@ body {
   transition: transform 0.2s ease;
 }
 
-#We:hover {
-  backdrop-filter: blur(16px);
-  transform: scale(1.05);
-}
-
-/* Аватарка на главной */
 #avatar-container {
   width: 50px;
   height: 50px;
 }
 
-#avatar-main {
+#avatar-img {
   position: relative;
   top: 20px;
   left: 160px;
-  z-index: 1000;
+  z-index: 5000;
   background: #FFF112;
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  object-fit: cover;
 }
 
-/* Кнопка "+" */
-#Pay {
-  z-index: 2000;
-  background: #FFF112;
-  width: 25px;
-  height: 25px;
-  position: fixed;
-  left: 312px;
-  top: 32px;
-  text-align: center;
-  border-radius: 100px;
-  line-height: 25px;
-  font-weight: 700;
-  color: #161616;
-  cursor: pointer;
-  user-select: none;
-}
-
-/* Стеклянный блок */
+/* ==============================
+   СТЕКЛЯННАЯ ПОЛОСКА (GlassB)
+   ============================== */
 #GlassB {
   display: inline-block;
+  position: fixed;
+  top: 50px;
+  left: 260px;
   width: 60px;
   height: 7px;
-  z-index: 1000;
-  position: fixed;
-  top: 30px;
-  left: 260px;
+  z-index: 4700;
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -142,7 +141,87 @@ body {
   border-radius: 50%;
 }
 
-/* Разделитель */
+/* ==============================
+   КНОПКА "+" (Pay)
+   ============================== */
+#Pay {
+  position: fixed;
+  top: 51px;
+  left: 315px;
+  width: 25px;
+  height: 25px;
+  background: #FFF112;
+  color: #161616;
+  text-align: center;
+  line-height: 25px;
+  border-radius: 100px;
+  z-index: 6000;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+#Pay:hover {
+  transform: scale(1.15);
+}
+
+a:has(#Pay) {
+  position: relative;
+  z-index: 5000;
+}
+
+/* ==============================
+   БАЛАНС — по центру GlassB
+   ============================== */
+#balance-value {
+  position: fixed;
+  top: 64px;
+  left: 301px;
+  transform: translate(-50%, -50%);
+  font-family: "Tit";
+  font-size: 14px;
+  line-height: 1;
+  color: #fff;
+  white-space: nowrap;
+  z-index: 6000;
+  pointer-events: none;
+  text-align: center;
+}
+
+/* ==============================
+   КАРУСЕЛЬ ПОСТЕРОВ
+   ============================== */
+.Corusel {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 15px;
+  padding: 10px 0;
+  position: relative;
+  top: -70px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: 0;
+}
+
+.Corusel::-webkit-scrollbar {
+  display: none;
+}
+
+.Corusel img {
+  flex: 0 0 100%;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  object-fit: cover;
+  border-radius: 50px;
+  border: 1px solid #3E3E3E;
+  scroll-snap-align: start;
+}
+
+/* ==============================
+   РАЗДЕЛИТЕЛЬ
+   ============================== */
 #hr {
   background: #3E3E3E;
   width: 300px;
@@ -152,206 +231,183 @@ body {
   left: 25px;
 }
 
-/* ============ БАЛАНС ============ */
-#balance-value {
-  font-family: "Tit";
-  z-index: 2000;
+/* ==============================
+   СТЕКЛО (оверлей)
+   ============================== */
+#glass-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 4500;
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  background: rgba(255, 255, 255, 0.08);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+
+#glass-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ==============================
+   ПАНЕЛЬ ПОПОЛНЕНИЯ
+   ============================== */
+#glass-panel {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100vw;
+  max-width: 100vw;
+  height: 62vh;                          /* 🔥 ВОТ ЭТО МЕНЯЙ: 50vh / 62vh / 70vh */
+  background: #161616;
+  border-radius: 30px 30px 0 0;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.6);
+  transform: translateY(100%);
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+  z-index: 1;
+
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 20px 30px;
   color: #fff;
-  position: relative;
-  top: -394px;
-  left: 298px;
+  font-family: "Tit", sans-serif;
+  overflow: hidden;
 }
 
-/* ============ ССЫЛКИ ============ */
-.NoDecorHref {
-  text-decoration-line: none;
+#glass-overlay.active #glass-panel {
+  transform: translateY(0);
 }
 
-a, a:link, a:visited, a:hover, a:active {
-  text-decoration: none;
-  color: inherit;
-  outline: none;
+/* Шапка */
+.panel-header {
+  flex-shrink: 0;
 }
 
-a {
+.panel-title {
+  font-size: 16px;
+  text-align: center;
+  margin-bottom: 22px;
+  color: #ccc;
+}
+
+.panel-title #method-name {
+  color: #FFF112;
+  font-weight: bold;
+}
+
+.methods {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 30px;
+}
+
+.method {
+  flex: 1;
+  padding: 12px 6px;
+  border-radius: 50px;
+  border: 1px solid #3E3E3E;
+  background: transparent;
+  color: #fff;
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
   -webkit-tap-highlight-color: transparent;
 }
 
-/* ============ КАРУСЕЛЬ ============ */
-.Corusel {
-  display: flex;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  gap: 15px;
-  padding: 10px;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  position: relative;
-  top: -70px;
+.method.active {
+  background: #FFF112;
+  color: #161616;
+  border-color: #FFF112;
+  font-weight: bold;
 }
 
-.Corusel img {
-  flex: 0 0 calc(100% - 20px);
-  scroll-snap-align: start;
-  height: auto;
-  max-width: 100%;
-  object-fit: cover;
-  border-radius: 50px;
-  border: 1px solid #3E3E3E;
-}
-
-/* ============ МОДАЛЬНОЕ ОКНО ПОПОЛНЕНИЯ ============ */
-.pay-modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 5000;
-}
-
-.pay-modal.active {
-  display: block;
-}
-
-/* Затемнение + размытие фона */
-.pay-modal-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  animation: fadeIn 0.25s ease;
-}
-
-/* Вкладка снизу */
-.pay-modal-content {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 55vh;
-  background: #1c1c1c;
-  border-radius: 24px 24px 0 0;
-  padding: 20px 25px 30px;
-  box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.6);
-  animation: slideUp 0.3s ease;
-  overflow-y: auto;
-  box-sizing: border-box;
-  text-align: center;
-  color: #fff;
-}
-
-.pay-modal-handle {
-  width: 40px;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 2px;
-  margin: 0 auto 15px;
-}
-
-.pay-modal-content h2 {
-  margin: 0 0 15px;
-  font-weight: 500;
-  font-size: 20px;
-}
-
-/* Аватарка + ник в модалке */
-#profile {
+/* Тело панели */
+.panel-body {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin-bottom: 15px;
 }
 
-.modal-avatar {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  object-fit: cover;
-  background: #FFF112;
-  margin-bottom: 8px;
+.method-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
-#user-name {
-  font-size: 15px;
-  color: #fff;
-  font-weight: 500;
-}
-
-/* Поле ввода */
-.input-group {
-  margin: 15px 0;
-  text-align: left;
-}
-
-.input-group label {
-  display: block;
+/* Stars */
+.field-label {
+  text-align: center;
+  color: #ccc;
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.7);
-  margin-bottom: 6px;
+  margin-bottom: 18px;
 }
 
-#stars-input {
-  width: 100%;
-  padding: 12px 16px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 14px;
+.amount-input {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #1f1f1f;
+  border: 1px solid #3E3E3E;
+  border-radius: 24px;
+  padding: 18px 20px;
+  margin-bottom: 14px;
+}
+
+.amount-input input {
+  background: transparent;
+  border: none;
   color: #fff;
-  font-size: 18px;
-  box-sizing: border-box;
+  font-size: 32px;
+  font-family: inherit;
+  text-align: center;
+  width: 120px;
   outline: none;
 }
 
-#stars-input:focus {
-  border-color: rgba(255, 255, 255, 0.5);
+.amount-input input::-webkit-outer-spin-button,
+.amount-input input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
-/* Кнопка оплаты */
-#pay-button {
-  width: 100%;
-  padding: 14px;
-  background: #FFF112;
+.star-emoji {
+  font-size: 28px;
+}
+
+.min-hint {
+  text-align: center;
+  color: #666;
+  font-size: 12px;
+  margin-bottom: auto;
+}
+
+.pay-btn {
+  margin-top: 30px;
+  padding: 18px;
+  border-radius: 50px;
   border: none;
-  border-radius: 16px;
+  background: #FFF112;
   color: #161616;
-  font-size: 18px;
-  font-weight: 700;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: bold;
   cursor: pointer;
-  margin-top: 10px;
-  transition: transform 0.2s ease;
+  transition: transform 0.15s ease, background 0.2s ease;
+  flex-shrink: 0;
 }
 
-#pay-button:active {
+.pay-btn:active {
   transform: scale(0.97);
 }
 
-#pay-button:disabled {
-  opacity: 0.5;
+.pay-btn:disabled {
+  background: #2a2a2a;
+  color: #666;
   cursor: not-allowed;
-}
-
-#result-message {
-  margin-top: 12px;
-  font-size: 14px;
-  min-height: 20px;
-  color: #aaffaa;
-}
-
-/* Анимации */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes slideUp {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
-}
-
-/* ============ ЭЛЕМЕНТЫ ПОВЕРХ РАЗМЫТИЯ ============ */
-#avatar-container,
-#We,
-#Pay,
-#GlassB {
-  z-index: 6000 !important;
 }
