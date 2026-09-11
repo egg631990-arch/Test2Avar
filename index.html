@@ -7,45 +7,96 @@
   <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-  
+
   <div id="Loading">
-      <video id="loading-video" src="loading.mp4" autoplay muted loop playsinline width="100px"></video>
-      <img src="img/logo.png" alt="logo" width="400px" id="logo-loading">
-      <p class="Text">loading...</p>
-      <p id="AutoP">Copyright © 2026</p>
-      <div id="Byg" style="color: #fff; white-space: nowrap;">
-        The <span style="color: #FFF112;">Virtual</span> Future of NFT <span style="color: #FFF112;">Games</span>
-      </div>
+    <video id="loading-video" src="loading.mp4" autoplay muted loop playsinline width="100px"></video>
+    <img src="img/logo.png" alt="logo" width="400px" id="logo-loading">
+    <p class="Text">loading...</p>
+    <p id="AutoP">Copyright © 2026</p>
+    <div id="Byg" style="color: #fff; white-space: nowrap;">
+      The <span style="color: #FFF112;">Virtual</span> Future of NFT <span style="color: #FFF112;">Games</span>
+    </div>
   </div>
-  
+
+  <!-- ==============================
+       СТЕКЛО + ПАНЕЛЬ ПОПОЛНЕНИЯ
+       ============================== -->
+  <div id="glass-overlay">
+    <div id="glass-panel">
+
+      <div class="panel-header">
+        <div class="panel-title">
+          Пополнить счёт через <span id="method-name">Stars</span>
+        </div>
+
+        <div class="methods">
+          <button class="method" data-method="gifts">Gifts</button>
+          <button class="method active" data-method="stars">Stars</button>
+          <button class="method" data-method="cryptobot">CryptoBot</button>
+          <button class="method" data-method="ton">Ton</button>
+        </div>
+      </div>
+
+
+        <!-- Gifts — пусто -->
+        <div class="method-content" data-content="gifts" hidden></div>
+
+        <!-- Stars — рабочая -->
+        <div class="method-content" data-content="stars">
+          <p class="field-label">Введите количество звёзд</p>
+
+          <div class="amount-input">
+            <input type="number" id="stars-input" value="0" min="10" inputmode="numeric">
+            <span class="star-emoji">⭐</span>
+          </div>
+
+          <p class="min-hint">Минимальная сумма 10⭐</p>
+
+          <button class="pay-btn" id="pay-stars" disabled>
+            Пополнить <span id="stars-display">0</span>⭐
+          </button>
+        </div>
+
+        <!-- CryptoBot — пусто -->
+        <div class="method-content" data-content="cryptobot" hidden></div>
+
+        <!-- Ton — пусто -->
+        <div class="method-content" data-content="ton" hidden></div>
+
+      </div>
+    </div>
+  </div>
+
   <div id="hr"></div>
-  <a href="Pay.html"><div id="Pay">+</div></a>
-  
+
+  <a href="javascript:void(0)"><div id="Pay">+</div></a>
+
   <div id="avatar-container">
     <img id="avatar-img" src="" alt="Аватар" style="width:50px; height:50px; border-radius:50%;">
   </div>
-  
+
   <a href="We.html" id="We"><img src="img/logo.png" id="logo" alt="logo" width="125px"></a>
   <a><div id="GlassB"></div></a>
-  
-  <div class="Corusel" class="border-radius">
+
+  <div class="Corusel" id="Poster">
     <img src="img/Poster1.png" alt="Poster1" width="350px">
     <img src="img/Poster2.png" alt="Poster2" width="350px">
     <img src="img/Poster3.png" alt="Poster3" width="350px">
   </div>
-  
+
   <div id="balance-display">
     <span id="balance-value">0</span>
   </div>
-  
-  <!-- Подключаем Telegram WebApp SDK -->
+
+  <!-- Telegram WebApp SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script src="js/index.js"></script>
   <script src="js/Pay.js"></script>
+  <script src="js/pay-panel.js"></script>
 
-  <!-- 🔥 Чтение баланса из CloudStorage -->
+  <!-- Чтение баланса из CloudStorage -->
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       if (typeof Telegram === 'undefined' || !Telegram.WebApp) {
         console.warn('Telegram WebApp не загружен');
         return;
@@ -68,10 +119,12 @@
 
       updateBalance();
 
-      // Обновляем баланс при возврате на страницу (например, после оплаты)
-      document.addEventListener('visibilitychange', function() {
+      document.addEventListener('visibilitychange', function () {
         if (!document.hidden) updateBalance();
       });
+
+      // Мгновенное обновление по событию из pay-panel.js
+      window.addEventListener('balanceUpdated', updateBalance);
     });
   </script>
 </body>
